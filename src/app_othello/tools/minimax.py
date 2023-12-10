@@ -1,36 +1,13 @@
-
-class Node:
-    def __init__(self, name, value, children=None):
-        if children is None:
-            children = []
-        self.name = name
-        self.value = value
-        self.children = children
-
-    def get_child(self, i):
-        return self.children[i]
-
-    def get_list_of_tuple_childen(self):
-        ans = []
-        for i in range(0, len(self.children)):
-            ans.append((self.children[i], self.children[i].get_value()))
-    def nb_children(self):
-        return len(self.children)
-
-    def get_value(self):
-        return self.value
-
-    def __str__(self):
-        return f"Node {self.name}"
+from src.app_othello.tools.Node import Node
 
 
 class Minimax:
     @staticmethod
-    def get_max_tuple(tuples, is_max = 1):
+    def get_max_tuple(tuples, is_max=1):
         if len(tuples) < 1:
             return None
         max_tuple = tuples[0]
-        for i in range(1,len(tuples)):
+        for i in range(1, len(tuples)):
             if len(tuples[i]) != 2:
                 return None
             if is_max * max_tuple[1] < is_max * tuples[i][1]:
@@ -43,9 +20,10 @@ class Minimax:
             return root, root.get_value(),
         list_child = []
         for i in range(root.nb_children()):
-            t = root.get_child(i), Minimax.choose_next_node(root.get_child(i), it-1, -is_max)[1]
+            t = root.get_child(i), Minimax.choose_next_node(root.get_child(i), it - 1, -is_max)[1]
             list_child.append(t)
         return Minimax.get_max_tuple(list_child, is_max)
+
 
 if __name__ == "__main__":
     e100 = Node("100", 1)
@@ -60,5 +38,4 @@ if __name__ == "__main__":
     e2 = Node("2", 11, [e4, e5, e0])
     e1 = Node("1", 7, [e2, e3, e100])
 
-
-    print(Minimax.choose_next_node(e1,5, 1)[0])
+    print(Minimax.choose_next_node(e1, 5, 1)[0])
