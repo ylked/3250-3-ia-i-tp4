@@ -59,24 +59,7 @@ class Node:
                 max_node = res
 
         return max_node, max_op
-   def max(self, depth) -> (Node, (int, int)):
-        if self.final() or depth <= 0:
-            return self, None
 
-        max_node = None
-        max_op = None
-
-        for row, col in self.operators():
-            new_game = self.game.copy_game()
-            new_game.move(row, col)
-            new_node = Node(new_game)
-            res, _ = new_node.min(depth-1)
-
-            if max_node is None or res.eval() > max_node.eval():
-                max_op = (row, col)
-                max_node = res
-
-        return max_node, max_op
 
 
 class Buehler_Dekhli:
