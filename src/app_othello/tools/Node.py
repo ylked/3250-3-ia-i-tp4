@@ -9,7 +9,7 @@ class Node:
     def get_child(self, i):
         return self.children[i]
 
-    def get_list_of_tuple_childen(self):
+    def get_list_of_tuple_children(self):
         ans = []
         for i in range(0, len(self.children)):
             ans.append((self.children[i], self.children[i].get_value()))
