@@ -9,103 +9,71 @@ from src.app_othello import othello
 color = othello.NONE
 
 class Node:
-    def __init__(self, game):
+    def __init__(self, game, children = None):
         self.game = game
-        self.children = []
+        if children is None:
+            self.children = []
+        else:
+            self.children = children
 
     def final(self) -> bool:
         return self.game.is_game_over() or not self.game.get_possible_move()
 
     def eval(self):
+        #return self.game.get_scores(color) + len(self.game.get_possible_move())
+        #return len(self.game.get_possible_move())
         return self.game.get_scores(color)
 
     def operators(self):
         return self.game.get_possible_move()
 
-    def min(self, depth) -> (Node, (int, int)):
+    def min(self, parent_score, depth) -> (int, (int, int)):
         if self.final() or depth <= 0:
-            return self, None
+            return self.eval(), None
 
-        min_node = None
+        min_node_score = None
         min_op = None
 
         for row, col in self.operators():
             new_game = self.game.copy_game()
             new_game.move(row, col)
             new_node = Node(new_game)
-            res, _ = new_node.max(depth-1)
+            res_score, _ = new_node.max(min_node_score, depth - 1)
 
-            if min_node is None or res.eval() < min_node.eval():
+            #self.children.append(new_node)
+
+            if min_node_score is None or res_score < min_node_score:
                 min_op = (row, col)
-                min_node = res
+                min_node_score = res_score
 
-        return min_node, min_op
-
-    def max(self, depth) -> (Node, (int, int)):
-        if self.final() or depth <= 0:
-            return self, None
-
-        max_node = None
-        max_op = None
-
-        for row, col in self.operators():
-            new_game = self.game.copy_game()
-            new_game.move(row, col)
-            new_node = Node(new_game)
-            res, _ = new_node.min(depth-1)
-
-            if max_node is None or res.eval() > max_node.eval():
-                max_op = (row, col)
-                max_node = res
-
-        return max_node, max_op
-
-
-    def ab_min(self, parent_max, depth) -> (Node, (int, int)):
-        if self.final() or depth <= 0:
-            return self, None
-
-        min_node = None
-        min_op = None
-
-        for row, col in self.operators():
-            new_game = self.game.copy_game()
-            new_game.move(row, col)
-            new_node = Node(new_game)
-            res, _ = new_node.ab_max(min_node, depth-1)
-
-            if min_node is None or res.eval() < min_node.eval():
-                min_op = (row, col)
-                min_node = res
-
-                if min_node is not None and parent_max is not None:
-                    if min_node.eval() < parent_max.eval():
+                if min_node_score is not None and parent_score is not None:
+                    if min_node_score < parent_score:
                         break
 
-        return min_node, min_op
+        return min_node_score, min_op
 
-    def ab_max(self, parent_min, depth) -> (Node, (int, int)):
+    def max(self, parent_score, depth) -> (int, (int, int)):
         if self.final() or depth <= 0:
-            return self, None
+            return self.eval(), None
 
-        max_node = None
         max_op = None
+        max_node_score = None
 
         for row, col in self.operators():
             new_game = self.game.copy_game()
             new_game.move(row, col)
             new_node = Node(new_game)
-            res, _ = new_node.ab_min(max_node, depth-1)
+            res_score, _ = new_node.min(max_node_score, depth - 1)
 
-            if max_node is None or res.eval() > max_node.eval():
+            if max_node_score is None or res_score > max_node_score:
                 max_op = (row, col)
-                max_node = res
+                max_node_score = res_score
 
-                if max_node is not None and parent_min is not None:
-                    if max_node.eval() > parent_min.eval():
+                if max_node_score is not None and parent_score is not None:
+                    if max_node_score > parent_score:
                         break
 
-        return max_node, max_op
+        return max_node_score, max_op
 
 
 class Buehler_Dekhli:
@@ -128,7 +96,7 @@ class Buehler_Dekhli:
         color = board.get_turn()
 
         node = Node(board)
-        _, op = node.ab_max(None, 5)
+        _, op = node.max(None, 5)
         return op
 
     def __str__(self):
