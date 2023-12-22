@@ -24,9 +24,6 @@ class Node:
         #return len(self.game.get_possible_move())
         return self.game.get_scores(color)
 
-    def operators(self):
-        return self.game.get_possible_move()
-
     def min(self, parent_score, depth) -> (int, (int, int)):
         if self.final() or depth <= 0:
             return self.eval(), None
@@ -34,7 +31,7 @@ class Node:
         min_node_score = None
         min_op = None
 
-        for row, col in self.operators():
+        for row, col in self.game.get_possible_move():
             new_game = self.game.copy_game()
             new_game.move(row, col)
             new_node = Node(new_game)
@@ -59,7 +56,7 @@ class Node:
         max_op = None
         max_node_score = None
 
-        for row, col in self.operators():
+        for row, col in self.game.get_possible_move():
             new_game = self.game.copy_game()
             new_game.move(row, col)
             new_node = Node(new_game)
