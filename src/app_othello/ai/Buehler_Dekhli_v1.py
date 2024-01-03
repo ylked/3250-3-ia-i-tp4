@@ -9,23 +9,17 @@ from src.app_othello import othello
 color = othello.NONE
 
 class Node:
-    def __init__(self, game, children = None):
+    def __init__(self, game):
         self.game = game
-        if children is None:
-            self.children = []
-        else:
-            self.children = children
 
     def final(self) -> bool:
         return self.game.is_game_over() or not self.game.get_possible_move()
 
     def eval(self):
-        #return self.game.get_scores(color) + len(self.game.get_possible_move())
-        #return len(self.game.get_possible_move())
         return self.game.get_scores(color)
 
     def min(self, parent_score, depth) -> (int, (int, int)):
-        if self.final() or depth <= 0:
+        if self.game.is_game_over() or depth <= 0:
             return self.eval(), None
 
         min_node_score = None
@@ -50,7 +44,7 @@ class Node:
         return min_node_score, min_op
 
     def max(self, parent_score, depth) -> (int, (int, int)):
-        if self.final() or depth <= 0:
+        if self.game.is_game_over() or depth <= 0:
             return self.eval(), None
 
         max_op = None
@@ -73,7 +67,7 @@ class Node:
         return max_node_score, max_op
 
 
-class Buehler_Dekhli:
+class Buehler_Dekhli_v1:
     '''The name of this class must be the same as its file.
     '''
 
@@ -97,4 +91,4 @@ class Buehler_Dekhli:
         return op
 
     def __str__(self):
-        return "Buehler_Dekhli"
+        return "Buehler_Dekhli_v2"
