@@ -6,7 +6,7 @@ import random
 
 from src.app_othello import othello
 
-color = othello.NONE
+THIS_PLAYER_COLOR = othello.NONE
 
 class Node:
     def __init__(self, game):
@@ -83,7 +83,7 @@ class Buehler_Dekhli_v3:
         Returns:
             tuple[int, int]: the next move (for instance: (2, 3) for (row, column), starting from 0)
         """
-        global color
+        global THIS_PLAYER_COLOR
         color = board.get_turn()
 
         node = Node(board)

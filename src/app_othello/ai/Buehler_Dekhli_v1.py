@@ -6,7 +6,7 @@ import random
 
 from src.app_othello import othello
 
-color = othello.NONE
+THIS_PLAYER_COLOR = othello.NONE
 
 class Node:
     def __init__(self, game):
@@ -16,7 +16,7 @@ class Node:
         return self.game.is_game_over() or not self.game.get_possible_move()
 
     def eval(self):
-        return self.game.get_scores(color)
+        return self.game.get_scores(THIS_PLAYER_COLOR)
 
     def min(self, parent_score, depth) -> (int, (int, int)):
         if self.game.is_game_over() or depth <= 0:
@@ -83,7 +83,7 @@ class Buehler_Dekhli_v1:
         Returns:
             tuple[int, int]: the next move (for instance: (2, 3) for (row, column), starting from 0)
         """
-        global color
+        global THIS_PLAYER_COLOR
         color = board.get_turn()
 
         node = Node(board)

@@ -5,7 +5,7 @@ from __future__ import annotations  # postpones the evaluation of the type hints
 
 from src.app_othello import othello
 
-color = othello.NONE
+THIS_PLAYER_COLOR = othello.NONE
 
 
 class Node:
@@ -24,7 +24,7 @@ class Node:
     def get_definitive_corner(self):
         corners = []
         for i, j in self.corners:
-            if self.board[i][j] == color:
+            if self.board[i][j] == THIS_PLAYER_COLOR:
                 corners.append((i, j))
 
         return corners
@@ -49,11 +49,11 @@ class Node:
 
         for corner_i, corner_j in self.get_definitive_corner():
             for j in range(corner_j, self.get_end_j(corner_j), self.get_step_j(corner_j)):
-                if self.board[corner_i][j] != color:
+                if self.board[corner_i][j] != THIS_PLAYER_COLOR:
                     break
 
                 for i in range(corner_i, self.get_end_i(corner_i), self.get_step_i(corner_i)):
-                    if self.board[i][j] == color:
+                    if self.board[i][j] == THIS_PLAYER_COLOR:
                         definitive.append((i, j))
                     else:
                         break
@@ -64,22 +64,22 @@ class Node:
         bonus = 0
         malus_for_near_corner = 5000
 
-        if self.board[0][0] != color:
-            if self.board[0][1] == color: bonus -= malus_for_near_corner
-            if self.board[1][0] == color: bonus -= malus_for_near_corner
-            if self.board[1][1] == color: bonus -= malus_for_near_corner
-        if self.board[0][self.cols - 1] != color:
-            if self.board[0][self.cols - 2] == color: bonus -= malus_for_near_corner
-            if self.board[1][self.cols - 1] == color: bonus -= malus_for_near_corner
-            if self.board[1][self.cols - 2] == color: bonus -= malus_for_near_corner
-        if self.board[self.rows - 1][0] != color:
-            if self.board[self.rows - 1][1] == color: bonus -= malus_for_near_corner
-            if self.board[self.rows - 2][0] == color: bonus -= malus_for_near_corner
-            if self.board[self.rows - 2][1] == color: bonus -= malus_for_near_corner
-        if self.board[self.rows - 1][self.cols - 1] != color:
-            if self.board[self.rows - 1][self.cols - 2] == color: bonus -= malus_for_near_corner
-            if self.board[self.rows - 2][self.cols - 1] == color: bonus -= malus_for_near_corner
-            if self.board[self.rows - 2][self.cols - 2] == color: bonus -= malus_for_near_corner
+        if self.board[0][0] != THIS_PLAYER_COLOR:
+            if self.board[0][1] == THIS_PLAYER_COLOR: bonus -= malus_for_near_corner
+            if self.board[1][0] == THIS_PLAYER_COLOR: bonus -= malus_for_near_corner
+            if self.board[1][1] == THIS_PLAYER_COLOR: bonus -= malus_for_near_corner
+        if self.board[0][self.cols - 1] != THIS_PLAYER_COLOR:
+            if self.board[0][self.cols - 2] == THIS_PLAYER_COLOR: bonus -= malus_for_near_corner
+            if self.board[1][self.cols - 1] == THIS_PLAYER_COLOR: bonus -= malus_for_near_corner
+            if self.board[1][self.cols - 2] == THIS_PLAYER_COLOR: bonus -= malus_for_near_corner
+        if self.board[self.rows - 1][0] != THIS_PLAYER_COLOR:
+            if self.board[self.rows - 1][1] == THIS_PLAYER_COLOR: bonus -= malus_for_near_corner
+            if self.board[self.rows - 2][0] == THIS_PLAYER_COLOR: bonus -= malus_for_near_corner
+            if self.board[self.rows - 2][1] == THIS_PLAYER_COLOR: bonus -= malus_for_near_corner
+        if self.board[self.rows - 1][self.cols - 1] != THIS_PLAYER_COLOR:
+            if self.board[self.rows - 1][self.cols - 2] == THIS_PLAYER_COLOR: bonus -= malus_for_near_corner
+            if self.board[self.rows - 2][self.cols - 1] == THIS_PLAYER_COLOR: bonus -= malus_for_near_corner
+            if self.board[self.rows - 2][self.cols - 2] == THIS_PLAYER_COLOR: bonus -= malus_for_near_corner
 
         return bonus
 
@@ -90,7 +90,7 @@ class Node:
     def eval(self):
         malus = self.get_malus_for_near_corner()
         definitive = self.count_definitive()
-        score = self.game.get_scores(color) - self.game.get_scores(self.color_inverse(color))
+        score = self.game.get_scores(THIS_PLAYER_COLOR) - self.game.get_scores(self.color_inverse(THIS_PLAYER_COLOR))
 
         return definitive * 1000 + score * 10 + malus
 
@@ -160,7 +160,7 @@ class Buehler_Dekhli_v5:
         Returns:
             tuple[int, int]: the next move (for instance: (2, 3) for (row, column), starting from 0)
         """
-        global color
+        global THIS_PLAYER_COLOR
         color = board.get_turn()
 
         node = Node(board)
