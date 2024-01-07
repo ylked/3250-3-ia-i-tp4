@@ -6,13 +6,12 @@ without having to change game settings.
 import multiprocessing
 import othello_gui
 
-base_name = "Buehler_Dekhli_"
+base_name = "Buehler_Dekhli"
 runners = (
-    (base_name + "v1", base_name + "v6"),
-    (base_name + "v2", base_name + "v6"),
-    (base_name + "v4", base_name + "v6"),
-    (base_name + "v5", base_name + "v6"),
-    ("Random", base_name + "v6")
+    (base_name + "_v1", base_name),
+    (base_name + "_v6", base_name),
+    (base_name + "_v5", base_name),
+    ("Random", base_name)
 )
 
 
@@ -28,7 +27,4 @@ def run_tests():
 
 
 if __name__ == "__main__":
-    game = othello_gui.OthelloGUI("Buehler_Dekhli_v6", "Buehler_Dekhli")
-    game.run_auto()
-
-
+    run_tests()

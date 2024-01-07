@@ -122,21 +122,6 @@ class Node:
 
         return BLACK if color == WHITE else WHITE
 
-    def _get_mobility_score(self):
-        switched = False
-        if self.game.get_turn() != THIS_PLAYER_COLOR:
-            self.game.switch_turn()
-            switched = True
-
-        our_mobility = len(self.game.get_possible_move())
-        self.game.switch_turn()
-        their_mobility = len(self.game.get_possible_move())
-
-        if not switched:
-            self.game.switch_turn()
-
-        return our_mobility - their_mobility
-
     def eval(self):
         """
         Gets the global evaluation score of the current game contained in this node. The better the score,
@@ -155,9 +140,8 @@ class Node:
         # difference between the score of our IA player and the one of the adversary
         score = self.game.get_scores(THIS_PLAYER_COLOR) - self.game.get_scores(self._color_inverse(THIS_PLAYER_COLOR))
 
-        mobility_score = self._get_mobility_score()
 
-        return definitive * 1000 + score * 10 - penalty + mobility_score * 20
+        return definitive * 1000 + score * 10 - penalty
 
     def alphabeta(self, parent_score, min_or_max, depth):
         """
@@ -196,7 +180,7 @@ class Node:
         return node_score, op
 
 
-class Buehler_Dekhli:
+class Buehler_Dekhli_v6:
     '''The name of this class must be the same as its file.
     '''
 
@@ -221,4 +205,4 @@ class Buehler_Dekhli:
         return op
 
     def __str__(self):
-        return "Buehler_Dekhli"
+        return "Buehler_Dekhli_v6"

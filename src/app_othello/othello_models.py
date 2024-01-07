@@ -181,7 +181,7 @@ class Turn:
             victory_text = 'Tie game. Nobody wins!'
         else:
             victory_text = PLAYERS[winner] + ' wins!'
-            # victory_text += f'\n Players Time (B|W): {int(self._total_time_BLACK)}s|{int(self._total_time_WHITE)}s'
+            victory_text += f'\n Players Time (B|W): {int(self._total_time_BLACK)}s|{int(self._total_time_WHITE)}s'
         self._turn_label['text'] = victory_text
 
     def display_cheater(self, cheater: str, row: int, col: int) -> None:
